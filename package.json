@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "npm run clean && babel src -d target --watch",
     "compile": "babel src -d target",
-    "clean": "del target\\*.* && rd /s target"
+    "clean": "del target\\*.* && rd /s target",
+    "dev": "set NODE_ENV=dev&&set DEBUG=my:*&&node target\\server.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,7 @@
   "homepage": "https://github.com/wlybq/pratice-for-node-v8.6.0#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "debug": "^3.1.0",
     "express": "^4.16.2",
     "mongoose": "^4.12.4",
     "multiparty": "^4.1.3",

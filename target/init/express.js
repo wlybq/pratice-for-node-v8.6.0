@@ -24,6 +24,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 module.exports = function (done) {
 
+	var debug = $.createDebug('init:express');
+	debug('init Express...');
+
 	var app = (0, _express2.default)();
 
 	// 配置bodyParser
