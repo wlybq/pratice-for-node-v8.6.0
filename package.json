@@ -1,0 +1,35 @@
+{
+  "name": "pratice-for-node-v8.6.0",
+  "version": "0.0.1",
+  "description": "一个node项目，node运行版本v8.6.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "npm run clean && babel src -d target --watch",
+    "compile": "babel src -d target",
+    "clean": "del target\\*.* && rd /s target"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wlybq/pratice-for-node-v8.6.0.git"
+  },
+  "author": "chen shi wu\u001b[D\u001b[C\u001b[C\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[\u001b[D\u001b[D\u001b[D\u001b[D\u001b[C\u001b[23C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[\u001b[C\u001b[C\u001b[C\u001b[C\u001bShiWu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wlybq/pratice-for-node-v8.6.0/issues"
+  },
+  "homepage": "https://github.com/wlybq/pratice-for-node-v8.6.0#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "mongoose": "^4.12.4",
+    "multiparty": "^4.1.3",
+    "project-core": "^2.1.0",
+    "serve-static": "^1.13.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1"
+  }
+}
