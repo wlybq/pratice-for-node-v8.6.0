@@ -57,7 +57,7 @@ module.exports = function (done) {
     /**
      * Method
      * @method: topic.get
-     * @param {Object} 参数说明：_id:MongoId(用户id)
+     * @param {Object} 参数说明：_id:MongoId(帖子id)
      * @return {Object} 返回添加成功后的值
      * @description 评论获取方法
      */

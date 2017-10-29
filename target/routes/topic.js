@@ -80,10 +80,19 @@ module.exports = function (done) {
                                     return s;
                                 });
                             }
-                            _context2.next = 3;
+                            if (!req.query.skip) {
+                                req.query.skip = 0;
+                            }
+                            if (!req.query.limit) {
+                                req.query.limit = 10;
+                            }
+                            req.query.skip = parseInt(req.query.skip);
+                            req.query.limit = parseInt(req.query.limit);
+
+                            _context2.next = 7;
                             return $.method('topic.list').call(req.query);
 
-                        case 3:
+                        case 7:
                             list = _context2.sent;
 
 
@@ -93,7 +102,7 @@ module.exports = function (done) {
                                 list: list
                             });
 
-                        case 5:
+                        case 9:
                         case 'end':
                             return _context2.stop();
                     }
@@ -110,7 +119,7 @@ module.exports = function (done) {
      * router Api
      * @type GET
      * @method topic.get
-     * @param {Object} 参数说明：_id:MongoId(用户id)
+     * @param {Object} 参数说明：_id:MongoId(帖子id)
      * @return {Object} 返回值 code为状态值 successify为是否成功 list帖子列表
      * @description 获取帖子接口
      */
