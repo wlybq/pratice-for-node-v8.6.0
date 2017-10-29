@@ -4,7 +4,6 @@
 ### 注意事项
 > 该项目在window系统下开发，所以有些npm run命令在linux系统下会报错
 
-
 ### 克隆项目
 ```
 git clone git@github.com:wlybq/pratice-for-node-v8.6.0.git
