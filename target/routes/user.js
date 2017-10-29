@@ -6,6 +6,7 @@ module.exports = function (done) {
 
     /**
      * router Api
+     * type: GET
      * name: login
      * desc: 登录接口
      */
@@ -20,7 +21,7 @@ module.exports = function (done) {
                                 break;
                             }
 
-                            throw { code: -1, errMsg: 'No user can quit' };
+                            throw { code: -1, errMsg: '还没有任何用户登录' };
 
                         case 2:
                             res.json({ user: req.session.user, token: req.session.logout_token });
@@ -40,6 +41,7 @@ module.exports = function (done) {
 
     /**
      * router Api
+     * type: POST
      * name: login
      * desc: 登录接口
      */
@@ -69,7 +71,10 @@ module.exports = function (done) {
                                 break;
                             }
 
-                            throw new Error('The password is incorrect');
+                            throw {
+                                code: -1,
+                                errMsg: '密码不正确'
+                            };
 
                         case 7:
 
@@ -98,23 +103,38 @@ module.exports = function (done) {
 
     /**
      * router Api
+     * type: GET
      * name: logout
      * desc: 登出接口
      */
-    $.router.post('/api/logout', function () {
+    $.router.get('/api/logout', function () {
         var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(req, res, next) {
             return regeneratorRuntime.wrap(function _callee3$(_context3) {
                 while (1) {
                     switch (_context3.prev = _context3.next) {
                         case 0:
-                            if (!(req.session.logout_token && req.query.token !== req.session.logout_token)) {
+                            if (req.session.logout_token) {
                                 _context3.next = 2;
                                 break;
                             }
 
-                            throw new Error('There are no objects to quit');
+                            throw {
+                                code: -1,
+                                errMsg: '没有可以退出的用户'
+                            };
 
                         case 2:
+                            if (!(req.query.token !== req.session.logout_token)) {
+                                _context3.next = 4;
+                                break;
+                            }
+
+                            throw {
+                                code: -2,
+                                errMsg: 'token参数缺失'
+                            };
+
+                        case 4:
 
                             delete req.session.user;
                             delete req.session.logout_token;
@@ -124,7 +144,7 @@ module.exports = function (done) {
                                 successify: true
                             });
 
-                        case 5:
+                        case 7:
                         case 'end':
                             return _context3.stop();
                     }
@@ -139,6 +159,7 @@ module.exports = function (done) {
 
     /**
      * router Api
+     * type: POST
      * name: signup
      * desc: 注册接口
      */

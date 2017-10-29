@@ -50,12 +50,12 @@ module.exports = function (done) {
 
                             throw {
                                 code: -1,
-                                errMsg: 'name ' + params.name + ' already exists'
+                                errMsg: '\u7528\u6237' + params.name + '\u5DF2\u7ECF\u5B58\u5728'
                             };
 
                         case 6:
                             _context.next = 8;
-                            return $.method('user.get').call({ name: params.email });
+                            return $.method('user.get').call({ email: params.email });
 
                         case 8:
                             _user = _context.sent;
@@ -66,8 +66,8 @@ module.exports = function (done) {
                             }
 
                             throw {
-                                code: -1,
-                                errMsg: 'name ' + params.name + ' already exists'
+                                code: -2,
+                                errMsg: '\u90AE\u7BB1' + params.email + '\u5DF2\u7ECF\u5B58\u5728'
                             };
 
                         case 11:
