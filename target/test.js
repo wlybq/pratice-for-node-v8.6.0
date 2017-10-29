@@ -12,11 +12,11 @@
 //     name: 'csl123456'
 // }, console.log);
 
-$.method('user.update').call({
-    name: 'csl123456',
-    rename: 'csl123456',
-    email: 'csl@qq.com',
-    password: '54321612',
-    nickname: '测试用户3',
-    about: 'update Second user'
-}, console.log);
+// $.method('user.update').call({
+//     name: 'csl123456',
+//     rename: 'csl123456',
+//     email: 'csl@qq.com',
+//     password: '54321612',
+//     nickname: '测试用户3',
+//     about: 'update Second user'
+// }, console.log);

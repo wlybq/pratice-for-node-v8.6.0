@@ -25,8 +25,9 @@
     "connect-multiparty": "^2.1.0",
     "debug": "^3.1.0",
     "express": "^4.16.2",
+    "express-session": "^1.15.6",
     "mongoose": "^4.12.4",
-    "project-core": "0.0.16",
+    "project-core": "0.1.0",
     "serve-static": "^1.13.1",
     "transform-runtime": "0.0.0",
     "validator": "^9.1.0"

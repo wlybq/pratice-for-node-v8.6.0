@@ -13,6 +13,7 @@ module.exports = function (done) {
     /**
      * Method
      * name: User.add
+     * desc: 用户添加方法
      */
     $.method('user.add').check({
         name: { required: true, validate: function validate(v) {
@@ -26,7 +27,7 @@ module.exports = function (done) {
             } }
     });
     $.method('user.add').register(function () {
-        var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(params, callback) {
+        var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(params) {
             var user, _user;
 
             return regeneratorRuntime.wrap(function _callee$(_context) {
@@ -35,6 +36,7 @@ module.exports = function (done) {
                         case 0:
 
                             params.name = params.name.toLowerCase();
+
                             _context.next = 3;
                             return $.method('user.get').call({ name: params.name });
 
@@ -46,10 +48,10 @@ module.exports = function (done) {
                                 break;
                             }
 
-                            return _context.abrupt('return', callback({
+                            throw {
                                 code: -1,
-                                errMsg: new Error('name ' + params.name + ' already exists')
-                            }));
+                                errMsg: 'name ' + params.name + ' already exists'
+                            };
 
                         case 6:
                             _context.next = 8;
@@ -63,14 +65,15 @@ module.exports = function (done) {
                                 break;
                             }
 
-                            return _context.abrupt('return', callback({
+                            throw {
                                 code: -1,
-                                errMsg: new Error('name ' + params.name + ' already exists')
-                            }));
+                                errMsg: 'name ' + params.name + ' already exists'
+                            };
 
                         case 11:
+
                             params.password = $.utils.encryptPassword(params.password.toString());
-                            new $.model.User(params).save(callback);
+                            return _context.abrupt('return', new $.model.User(params).save());
 
                         case 13:
                         case 'end':
@@ -80,7 +83,7 @@ module.exports = function (done) {
             }, _callee, this);
         }));
 
-        return function (_x, _x2) {
+        return function (_x) {
             return _ref.apply(this, arguments);
         };
     }());
@@ -88,6 +91,7 @@ module.exports = function (done) {
     /**
      * Method
      * name: User.get
+     * desc: 获取用户方法
      */
     $.method('user.get').check({
         _id: { validate: function validate(v) {
@@ -101,7 +105,7 @@ module.exports = function (done) {
             } }
     });
     $.method('user.get').register(function () {
-        var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(params, callback) {
+        var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(params) {
             var query;
             return regeneratorRuntime.wrap(function _callee2$(_context2) {
                 while (1) {
@@ -109,21 +113,45 @@ module.exports = function (done) {
                         case 0:
                             query = {};
 
-                            if (params._id) {
-                                query._id = params._id;
-                            } else if (params.name) {
-                                query.name = params.name;
-                            } else if (params.email) {
-                                query.email = params.email;
-                            } else {
-                                callback({
-                                    code: -1,
-                                    errMsg: new Error('Please entry your query content [_id|name|email]')
-                                });
+                            if (!params._id) {
+                                _context2.next = 5;
+                                break;
                             }
-                            $.model.User.findOne(query, callback);
 
-                        case 3:
+                            query._id = params._id;
+                            _context2.next = 14;
+                            break;
+
+                        case 5:
+                            if (!params.name) {
+                                _context2.next = 9;
+                                break;
+                            }
+
+                            query.name = params.name;
+                            _context2.next = 14;
+                            break;
+
+                        case 9:
+                            if (!params.email) {
+                                _context2.next = 13;
+                                break;
+                            }
+
+                            query.email = params.email;
+                            _context2.next = 14;
+                            break;
+
+                        case 13:
+                            throw {
+                                code: -1,
+                                errMsg: 'Please entry your query content [_id|name|email]'
+                            };
+
+                        case 14:
+                            return _context2.abrupt('return', $.model.User.findOne(query));
+
+                        case 15:
                         case 'end':
                             return _context2.stop();
                     }
@@ -131,7 +159,7 @@ module.exports = function (done) {
             }, _callee2, this);
         }));
 
-        return function (_x3, _x4) {
+        return function (_x2) {
             return _ref2.apply(this, arguments);
         };
     }());
@@ -139,6 +167,7 @@ module.exports = function (done) {
     /**
      * Method
      * name: User.update
+     * desc: 用户信息修改方法
      */
     $.method('user.update').check({
         _id: { validate: function validate(v) {
@@ -152,7 +181,7 @@ module.exports = function (done) {
             } }
     });
     $.method('user.update').register(function () {
-        var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(params, callback) {
+        var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(params) {
             var user, update;
             return regeneratorRuntime.wrap(function _callee3$(_context3) {
                 while (1) {
@@ -164,12 +193,17 @@ module.exports = function (done) {
                         case 2:
                             user = _context3.sent;
 
-                            if (!user) {
-                                callback({
-                                    code: -1,
-                                    errMsg: new Error('user ' + params.name + ' not exists')
-                                });
+                            if (user) {
+                                _context3.next = 5;
+                                break;
                             }
+
+                            throw {
+                                code: -1,
+                                errMsg: 'user ' + params.name + ' not exists'
+                            };
+
+                        case 5:
                             update = {};
 
                             if (user.name && user.name !== params.rename) update.name = params.rename;
@@ -178,9 +212,9 @@ module.exports = function (done) {
                             if (user.nickname && user.nickname !== params.nickname) update.nickname = params.nickname;
                             if (user.about && user.about !== params.about) update.about = params.about;
 
-                            $.model.User.update({ _id: user._id }, { $set: update }, callback);
+                            return _context3.abrupt('return', $.model.User.update({ _id: user._id }, { $set: update }));
 
-                        case 11:
+                        case 12:
                         case 'end':
                             return _context3.stop();
                     }
@@ -188,7 +222,7 @@ module.exports = function (done) {
             }, _callee3, this);
         }));
 
-        return function (_x5, _x6) {
+        return function (_x3) {
             return _ref3.apply(this, arguments);
         };
     }());
