@@ -12,6 +12,8 @@ var _debug = require("debug");
 
 var _debug2 = _interopRequireDefault(_debug);
 
+require("babel-polyfill");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var $ = global.$ = new _projectCore2.default();
@@ -41,6 +43,9 @@ $.init.load(_path2.default.resolve(__dirname, 'init', 'mongodb.js'));
 // 加载model
 $.init.load(_path2.default.resolve(__dirname, 'models'));
 
+// 加载methods
+$.init.load(_path2.default.resolve(__dirname, 'methods'));
+
 // 初始化Express
 $.init.load(_path2.default.resolve(__dirname, 'init', 'express.js'));
 
@@ -57,10 +62,5 @@ $.init(function (err) {
 		console.log('inited');
 	}
 
-	/*const item = new $.model.User({
- 	name: `User${$.utils.date('YmdHis')}`,
- 	password: '123456',
- 	nickname: '测试用户1'
- });
- item.save(console.log);*/
+	// require('./test');
 });
