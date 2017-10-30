@@ -18,11 +18,11 @@ module.exports = function (done) {
      * @description 帖子添加方法
      */
     $.method('topic.add').check({
-        authorId: { require: true, validate: function validate(v) {
+        authorId: { required: true, validate: function validate(v) {
                 return _validator2.default.isMongoId;
             } },
-        title: { require: true },
-        content: { require: true },
+        title: { required: true },
+        content: { required: true },
         tags: { validate: function validate(v) {
                 return Array.isArray(v);
             } }
@@ -37,11 +37,10 @@ module.exports = function (done) {
 
                             params.createdAt = new Date();
                             params.updateedAt = new Date();
-                            params.lastCommentedAt = new Date();
                             topic = new $.model.Topic(params);
                             return _context.abrupt('return', topic.save());
 
-                        case 5:
+                        case 4:
                         case 'end':
                             return _context.stop();
                     }
@@ -59,10 +58,10 @@ module.exports = function (done) {
      * @method: topic.get
      * @param {Object} 参数说明：_id:MongoId(帖子id)
      * @return {Object} 返回添加成功后的值
-     * @description 评论获取方法
+     * @description 根据帖子id获取帖子内容
      */
     $.method('topic.get').check({
-        _id: { require: true, validate: function validate(v) {
+        _id: { required: true, validate: function validate(v) {
                 return _validator2.default.isMongoId(v);
             } }
     });
@@ -110,7 +109,7 @@ module.exports = function (done) {
     });
     $.method('topic.list').register(function () {
         var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(params) {
-            var query, ret;
+            var query, queryStr, ret;
             return regeneratorRuntime.wrap(function _callee3$(_context3) {
                 while (1) {
                     switch (_context3.prev = _context3.next) {
@@ -120,21 +119,24 @@ module.exports = function (done) {
                             if (params.authorId) query.authorId = params.authorId;
                             if (params.tags) query.tags = { $all: params.tags };
 
-                            ret = $.model.Topic.find(query, {
+                            queryStr = {
                                 authorId: 1,
                                 title: 1,
                                 tags: 1,
+                                content: 1,
                                 createdAt: 1,
                                 updatedAt: 1,
                                 lastCommentedAt: 1
-                            });
+                            };
+                            ret = $.model.Topic.find(query, queryStr);
+                            // const ret2 = $.model.Topic.find(query, queryStr);
 
                             if (params.skip) ret.skip(params.skip);
                             if (params.limit) ret.limit(params.limit);
 
                             return _context3.abrupt('return', ret);
 
-                        case 7:
+                        case 8:
                         case 'end':
                             return _context3.stop();
                     }
@@ -144,6 +146,82 @@ module.exports = function (done) {
 
         return function (_x3) {
             return _ref3.apply(this, arguments);
+        };
+    }());
+
+    /**
+     * Method
+     * @method: topic.delete
+     * @param {Object} 参数说明：_id:MongoId(帖子id)
+     * @return {Object} 返回添加成功后的值
+     * @description 根据帖子id删除帖子
+     */
+    $.method('topic.delete').check({
+        _id: { required: true, validate: function validate(v) {
+                return _validator2.default.isMongoId(v);
+            } }
+    });
+    $.method('topic.delete').register(function () {
+        var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(params) {
+            return regeneratorRuntime.wrap(function _callee4$(_context4) {
+                while (1) {
+                    switch (_context4.prev = _context4.next) {
+                        case 0:
+                            return _context4.abrupt('return', $.model.Topic.remove({ _id: params._id }));
+
+                        case 1:
+                        case 'end':
+                            return _context4.stop();
+                    }
+                }
+            }, _callee4, this);
+        }));
+
+        return function (_x4) {
+            return _ref4.apply(this, arguments);
+        };
+    }());
+
+    /**
+     * Method
+     * @method: topic.update
+     * @param {Object} 参数说明：_id:MongoId(帖子id)
+     * @return {Object} 返回添加成功后的值
+     * @description 根据帖子id删除帖子
+     */
+    $.method('topic.update').check({
+        _id: { required: true, validate: function validate(v) {
+                return _validator2.default.isMongoId(v);
+            } },
+        tags: { validate: function validate(v) {
+                return Array.isArray(v);
+            } }
+    });
+    $.method('topic.update').register(function () {
+        var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(params) {
+            var update;
+            return regeneratorRuntime.wrap(function _callee5$(_context5) {
+                while (1) {
+                    switch (_context5.prev = _context5.next) {
+                        case 0:
+                            update = { updateedAt: new Date() };
+
+                            if (params.title) update.title = params.title;
+                            if (params.content) update.content = params.content;
+                            if (params.tags) update.tags = params.tags;
+
+                            return _context5.abrupt('return', $.model.Topic.update({ _id: params._id }, { $set: update }));
+
+                        case 5:
+                        case 'end':
+                            return _context5.stop();
+                    }
+                }
+            }, _callee5, this);
+        }));
+
+        return function (_x5) {
+            return _ref5.apply(this, arguments);
         };
     }());
 

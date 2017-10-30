@@ -15,10 +15,7 @@ module.exports = function (done) {
                                 break;
                             }
 
-                            throw {
-                                code: -1,
-                                errMsg: '该操作需要登录'
-                            };
+                            throw { code: -1, errMsg: '该操作需要登录' };
 
                         case 2:
                             next();
@@ -33,6 +30,51 @@ module.exports = function (done) {
 
         return function (_x, _x2, _x3) {
             return _ref.apply(this, arguments);
+        };
+    }();
+
+    $.checkTopicAuthor = function () {
+        var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(req, res, next) {
+            var topic;
+            return regeneratorRuntime.wrap(function _callee2$(_context2) {
+                while (1) {
+                    switch (_context2.prev = _context2.next) {
+                        case 0:
+                            _context2.next = 2;
+                            return $.method('topic.get').call({ _id: req.params.topic_id });
+
+                        case 2:
+                            topic = _context2.sent;
+
+                            if (topic) {
+                                _context2.next = 5;
+                                break;
+                            }
+
+                            throw { code: -1, errMsg: '帖子不存在或已被删除' };
+
+                        case 5:
+                            if (!(topic.authorId.toString() !== req.session.user._id.toString())) {
+                                _context2.next = 7;
+                                break;
+                            }
+
+                            throw { code: -2, errMsg: '该操作需要相应的权限' };
+
+                        case 7:
+                            req.topic = topic;
+                            next();
+
+                        case 9:
+                        case 'end':
+                            return _context2.stop();
+                    }
+                }
+            }, _callee2, this);
+        }));
+
+        return function (_x4, _x5, _x6) {
+            return _ref2.apply(this, arguments);
         };
     }();
 

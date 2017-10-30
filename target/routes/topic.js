@@ -20,8 +20,6 @@ module.exports = function (done) {
                     switch (_context.prev = _context.next) {
                         case 0:
 
-                            console.log(req.body);
-
                             req.body.authorId = req.session.user._id;
 
                             if ('tags' in req.body) {
@@ -31,20 +29,16 @@ module.exports = function (done) {
                                     return s;
                                 });
                             }
-                            _context.next = 5;
+                            _context.next = 4;
                             return $.method('topic.add').call(req.body);
 
-                        case 5:
+                        case 4:
                             topic = _context.sent;
 
 
-                            res.json({
-                                code: 1,
-                                successify: true,
-                                topic: topic
-                            });
+                            res.apiReturn(1, { topic: topic });
 
-                        case 7:
+                        case 6:
                         case 'end':
                             return _context.stop();
                     }
@@ -96,11 +90,7 @@ module.exports = function (done) {
                             list = _context2.sent;
 
 
-                            res.json({
-                                code: 1,
-                                successify: true,
-                                list: list
-                            });
+                            res.apiReturn(1, { list: list });
 
                         case 9:
                         case 'end':
@@ -118,10 +108,10 @@ module.exports = function (done) {
     /**
      * router Api
      * @type GET
-     * @method topic.get
+     * @method topic/item/:topic_id
      * @param {Object} 参数说明：_id:MongoId(帖子id)
-     * @return {Object} 返回值 code为状态值 successify为是否成功 list帖子列表
-     * @description 获取帖子接口
+     * @return {Object} 返回值 code为状态值 successify为是否成功 topic帖子详情
+     * @description 根据帖子id获取帖子接口
      */
     $.router.get('/api/topic/item/:topic_id', function () {
         var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(req, res, next) {
@@ -145,11 +135,7 @@ module.exports = function (done) {
 
                         case 5:
 
-                            res.json({
-                                code: 1,
-                                successify: true,
-                                topic: topic
-                            });
+                            res.apiReturn(1, { topic: topic });
 
                         case 6:
                         case 'end':
@@ -161,6 +147,92 @@ module.exports = function (done) {
 
         return function (_x7, _x8, _x9) {
             return _ref3.apply(this, arguments);
+        };
+    }());
+
+    /**
+     * router Api
+     * @type POST
+     * @method topic/update/:topic_id
+     * @param {Object} 参数说明：_id:MongoId（帖子id） title:String（帖子标题） content:String（帖子内容） tags:String（标签*使用','分隔）
+     * @return {Object} 返回值 code为状态值 successify为是否成功 list帖子列表
+     * @description 根据帖子id更新帖子接口
+     */
+    $.router.post('/api/topic/update/:topic_id', $.checkLogin, $.checkTopicAuthor, function () {
+        var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(req, res, next) {
+            var updateResult, topic;
+            return regeneratorRuntime.wrap(function _callee4$(_context4) {
+                while (1) {
+                    switch (_context4.prev = _context4.next) {
+                        case 0:
+
+                            req.body._id = req.params.topic_id;
+                            if ('tags' in req.body) {
+                                req.body.tags = req.body.tags.split(',').map(function (s) {
+                                    return s.trim();
+                                }).filter(function (s) {
+                                    return s;
+                                });
+                            }
+                            _context4.next = 4;
+                            return $.method('topic.update').call(req.body);
+
+                        case 4:
+                            updateResult = _context4.sent;
+                            _context4.next = 7;
+                            return $.method('topic.get').call({ _id: req.params.topic_id });
+
+                        case 7:
+                            topic = _context4.sent;
+
+                            res.apiReturn(1, { updateResult: updateResult, topic: topic });
+
+                        case 9:
+                        case 'end':
+                            return _context4.stop();
+                    }
+                }
+            }, _callee4, this);
+        }));
+
+        return function (_x10, _x11, _x12) {
+            return _ref4.apply(this, arguments);
+        };
+    }());
+
+    /**
+     * router Api
+     * @type DELETE
+     * @method topic/update/:topic_id
+     * @param {Object} 参数说明：_id:MongoId（帖子id） title:String（帖子标题） content:String（帖子内容） tags:String（标签*使用','分隔）
+     * @return {Object} 返回值 code为状态值 successify为是否成功 list帖子列表
+     * @description 根据帖子id更新帖子接口
+     */
+    $.router.delete('/api/topic/delete/:topic_id', $.checkLogin, $.checkTopicAuthor, function () {
+        var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(req, res, next) {
+            var topic;
+            return regeneratorRuntime.wrap(function _callee5$(_context5) {
+                while (1) {
+                    switch (_context5.prev = _context5.next) {
+                        case 0:
+                            _context5.next = 2;
+                            return $.method('topic.delete').call({ _id: req.params.topic_id });
+
+                        case 2:
+                            topic = _context5.sent;
+
+                            res.apiReturn(1, { topic: topic });
+
+                        case 4:
+                        case 'end':
+                            return _context5.stop();
+                    }
+                }
+            }, _callee5, this);
+        }));
+
+        return function (_x13, _x14, _x15) {
+            return _ref5.apply(this, arguments);
         };
     }());
 

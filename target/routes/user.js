@@ -24,7 +24,7 @@ module.exports = function (done) {
                             throw { code: -1, errMsg: '还没有任何用户登录' };
 
                         case 2:
-                            res.json({ user: req.session.user, token: req.session.logout_token });
+                            res.apiReturn(1, { user: req.session.user, token: req.session.logout_token });
 
                         case 3:
                         case 'end':
@@ -63,7 +63,7 @@ module.exports = function (done) {
                                 break;
                             }
 
-                            return _context2.abrupt('return', next({ code: -1, errMasg: new Error('user does not exists') }));
+                            throw { code: -1, errMsg: '\u7528\u6237' + req.body.name + '\u4E0D\u5B58\u5728' };
 
                         case 5:
                             if (!(!req.body.password || !$.utils.validatePassword(req.body.password, user.password))) {
@@ -82,11 +82,7 @@ module.exports = function (done) {
                             req.session.logout_token = $.utils.randomString(20);
 
                             // 成功返回值
-                            res.json({
-                                code: 1,
-                                successify: true,
-                                token: req.session.logout_token
-                            });
+                            res.apiReturn(1, { token: req.session.logout_token });
 
                         case 10:
                         case 'end':
@@ -113,25 +109,25 @@ module.exports = function (done) {
                 while (1) {
                     switch (_context3.prev = _context3.next) {
                         case 0:
-                            if (req.session.logout_token) {
+                            if (req.query.token) {
                                 _context3.next = 2;
                                 break;
                             }
 
                             throw {
                                 code: -1,
-                                errMsg: '没有可以退出的用户'
+                                errMsg: 'token参数缺失'
                             };
 
                         case 2:
-                            if (!(req.query.token !== req.session.logout_token)) {
+                            if (!(req.session.logout_token && req.query.token !== req.session.logout_token)) {
                                 _context3.next = 4;
                                 break;
                             }
 
                             throw {
                                 code: -2,
-                                errMsg: 'token参数缺失'
+                                errMsg: '没有可以退出的用户'
                             };
 
                         case 4:
@@ -139,10 +135,7 @@ module.exports = function (done) {
                             delete req.session.user;
                             delete req.session.logout_token;
 
-                            res.json({
-                                code: 1,
-                                successify: true
-                            });
+                            res.apiReturn(1, {});
 
                         case 7:
                         case 'end':
@@ -176,11 +169,7 @@ module.exports = function (done) {
                         case 2:
                             user = _context4.sent;
 
-                            res.json({
-                                code: 1,
-                                successify: true,
-                                user: user
-                            });
+                            res.apiReturn(1, { user: user });
 
                         case 4:
                         case 'end':
