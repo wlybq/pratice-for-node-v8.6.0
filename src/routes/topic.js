@@ -104,5 +104,42 @@ module.exports = function(done) {
 
     });
 
+    /**
+     * router Api
+     * @type POST
+     * @method topic/item/:topic_id/comment/add
+     * @param {Object} 参数说明：_id:MongoId(帖子id) authorId（用户id） content（评论内容）
+     * @return {Object} 返回添加成功后的值
+     * @description 评论添加
+     */
+    $.router.post('/api/topic/item/:topic_id/comment/add', $.checkLogin, async function (req, res, next) {
+
+        req.body._id = req.params.topic_id;
+        req.body.authorId = req.session.user._id;
+
+        const comment = await $.method('topic.comment.add').call(req.body);
+        res.apiReturn(1, {comment});
+
+    });
+
+    /**
+     * router Api
+     * @type POST
+     * @method topic/item/:topic_id/comment/delete
+     * @param {Object} 参数说明：_id:MongoId(帖子id) cid（评论id）
+     * @return {Object} 返回删除成功后的值
+     * @description 评论删除
+     */
+    $.router.post('/api/topic/item/:topic_id/comment/delete', $.checkLogin, $.checkTopicAuthor, async function (req, res, next) {
+
+        req.body._id = req.params.topic_id;
+        req.body.authorId = req.session.user._id;
+
+        const delRes = await $.method('topic.comment.delete').call(req.body);
+
+        res.apiReturn(1, {delRes});
+
+    });
+
     done();
 };

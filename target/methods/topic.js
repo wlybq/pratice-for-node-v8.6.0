@@ -225,5 +225,87 @@ module.exports = function (done) {
         };
     }());
 
+    /**
+     * Method
+     * @method: topic.comment.add
+     * @param {Object} 参数说明：_id:MongoId(帖子id) authorId（用户id） content（评论内容）
+     * @return {Object} 返回添加成功后的值
+     * @description 评论添加
+     */
+    $.method('topic.comment.add').check({
+        _id: { required: true, validate: function validate(v) {
+                return _validator2.default.isMongoId(v);
+            } },
+        authorId: { required: true, validate: function validate(v) {
+                return _validator2.default.isMongoId(v);
+            } },
+        content: { required: true }
+    });
+    $.method('topic.comment.add').register(function () {
+        var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(params) {
+            var date, comment, result;
+            return regeneratorRuntime.wrap(function _callee6$(_context6) {
+                while (1) {
+                    switch (_context6.prev = _context6.next) {
+                        case 0:
+                            date = new Date();
+                            comment = {
+                                cid: new $.utils.ObjectId(),
+                                authorId: params.authorId,
+                                content: params.content,
+                                createdAt: date
+                            };
+                            result = $.model.Topic.update({ _id: params._id }, { $push: { comments: comment } });
+                            return _context6.abrupt('return', result);
+
+                        case 4:
+                        case 'end':
+                            return _context6.stop();
+                    }
+                }
+            }, _callee6, this);
+        }));
+
+        return function (_x6) {
+            return _ref6.apply(this, arguments);
+        };
+    }());
+
+    /**
+     * Method
+     * @method: topic.comment.delete
+     * @param {Object} 参数说明：_id:MongoId(帖子id) cid（评论id）
+     * @return {Object} 返回删除成功后的值
+     * @description 评论删除
+     */
+    $.method('topic.comment.delete').check({
+        _id: { required: true, validate: function validate(v) {
+                return _validator2.default.isMongoId(v);
+            } },
+        cid: { required: true, validate: function validate(v) {
+                return _validator2.default.isMongoId(v);
+            } }
+    });
+    $.method('topic.comment.delete').register(function () {
+        var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(params) {
+            return regeneratorRuntime.wrap(function _callee7$(_context7) {
+                while (1) {
+                    switch (_context7.prev = _context7.next) {
+                        case 0:
+                            return _context7.abrupt('return', $.model.Topic.update({ _id: params._id }, { $pull: { comments: { cid: params.cid } } }));
+
+                        case 1:
+                        case 'end':
+                            return _context7.stop();
+                    }
+                }
+            }, _callee7, this);
+        }));
+
+        return function (_x7) {
+            return _ref7.apply(this, arguments);
+        };
+    }());
+
     done();
 };

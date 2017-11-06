@@ -11,5 +11,12 @@ module.exports = function(done) {
 	$.mongodb = conn;
 	$.model = {};
 
+	const Schema = mongoose.Schema;
+	const ObjectId = Schema.ObjectId;
+
+	$.Schema = Schema;
+	$.ObjectId = ObjectId;
+	$.utils.ObjectId = mongoose.Types.ObjectId;
+
 	done();
-}
+};

@@ -1,11 +1,10 @@
 'use strict';
 
-import mongoose from "mongoose";
 
 module.exports = function(done) {
 
-	const Schema = mongoose.Schema;
-	const ObjectId = Schema.ObjectId;
+	const Schema = $.Schema;
+	const ObjectId = $.ObjectId;
 
 	const User = new Schema({
 		name: {type: String, unique: true},

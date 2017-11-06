@@ -15,5 +15,12 @@ module.exports = function (done) {
 	$.mongodb = conn;
 	$.model = {};
 
+	var Schema = _mongoose2.default.Schema;
+	var ObjectId = Schema.ObjectId;
+
+	$.Schema = Schema;
+	$.ObjectId = ObjectId;
+	$.utils.ObjectId = _mongoose2.default.Types.ObjectId;
+
 	done();
 };

@@ -236,5 +236,86 @@ module.exports = function (done) {
         };
     }());
 
+    /**
+     * router Api
+     * @type POST
+     * @method topic/item/:topic_id/comment/add
+     * @param {Object} 参数说明：_id:MongoId(帖子id) authorId（用户id） content（评论内容）
+     * @return {Object} 返回添加成功后的值
+     * @description 评论添加
+     */
+    $.router.post('/api/topic/item/:topic_id/comment/add', $.checkLogin, function () {
+        var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(req, res, next) {
+            var comment;
+            return regeneratorRuntime.wrap(function _callee6$(_context6) {
+                while (1) {
+                    switch (_context6.prev = _context6.next) {
+                        case 0:
+
+                            req.body._id = req.params.topic_id;
+                            req.body.authorId = req.session.user._id;
+
+                            _context6.next = 4;
+                            return $.method('topic.comment.add').call(req.body);
+
+                        case 4:
+                            comment = _context6.sent;
+
+                            res.apiReturn(1, { comment: comment });
+
+                        case 6:
+                        case 'end':
+                            return _context6.stop();
+                    }
+                }
+            }, _callee6, this);
+        }));
+
+        return function (_x16, _x17, _x18) {
+            return _ref6.apply(this, arguments);
+        };
+    }());
+
+    /**
+     * router Api
+     * @type POST
+     * @method topic/item/:topic_id/comment/delete
+     * @param {Object} 参数说明：_id:MongoId(帖子id) cid（评论id）
+     * @return {Object} 返回删除成功后的值
+     * @description 评论删除
+     */
+    $.router.post('/api/topic/item/:topic_id/comment/delete', $.checkLogin, $.checkTopicAuthor, function () {
+        var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(req, res, next) {
+            var delRes;
+            return regeneratorRuntime.wrap(function _callee7$(_context7) {
+                while (1) {
+                    switch (_context7.prev = _context7.next) {
+                        case 0:
+
+                            req.body._id = req.params.topic_id;
+                            req.body.authorId = req.session.user._id;
+
+                            _context7.next = 4;
+                            return $.method('topic.comment.delete').call(req.body);
+
+                        case 4:
+                            delRes = _context7.sent;
+
+
+                            res.apiReturn(1, { delRes: delRes });
+
+                        case 6:
+                        case 'end':
+                            return _context7.stop();
+                    }
+                }
+            }, _callee7, this);
+        }));
+
+        return function (_x19, _x20, _x21) {
+            return _ref7.apply(this, arguments);
+        };
+    }());
+
     done();
 };

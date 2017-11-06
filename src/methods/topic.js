@@ -120,5 +120,48 @@ module.exports = function (done) {
 
     });
 
+    /**
+     * Method
+     * @method: topic.comment.add
+     * @param {Object} 参数说明：_id:MongoId(帖子id) authorId（用户id） content（评论内容）
+     * @return {Object} 返回添加成功后的值
+     * @description 评论添加
+     */
+    $.method('topic.comment.add').check({
+        _id: {required: true, validate: v => validator.isMongoId(v)},
+        authorId: {required: true, validate: v => validator.isMongoId(v)},
+        content: {required: true}
+    });
+    $.method('topic.comment.add').register(async function (params) {
+
+        const date = new Date();
+        const comment = {
+            cid: new $.utils.ObjectId(),
+            authorId: params.authorId,
+            content: params.content,
+            createdAt: date
+        };
+        const result = $.model.Topic.update({_id: params._id}, {$push: {comments: comment}});
+        return result;
+
+    });
+
+    /**
+     * Method
+     * @method: topic.comment.delete
+     * @param {Object} 参数说明：_id:MongoId(帖子id) cid（评论id）
+     * @return {Object} 返回删除成功后的值
+     * @description 评论删除
+     */
+    $.method('topic.comment.delete').check({
+        _id: {required: true, validate: v => validator.isMongoId(v)},
+        cid: {required: true, validate: v => validator.isMongoId(v)}
+    });
+    $.method('topic.comment.delete').register(async function (params) {
+
+        return $.model.Topic.update({_id: params._id}, {$pull: {comments: {cid: params.cid}}});
+
+    });
+
     done();
 };

@@ -1,11 +1,9 @@
 'use strict';
 
-import mongoose from "mongoose";
-
 module.exports = function(done) {
 
-	const Schema = mongoose.Schema;
-	const ObjectId = Schema.ObjectId;
+	const Schema = $.Schema;
+	const ObjectId = $.ObjectId;
 
 	const Topic = new Schema({
         authorId: {type: ObjectId, index: true},
@@ -16,10 +14,10 @@ module.exports = function(done) {
         updateedAt: {type: Date, index: true},
         lastCommentedAt: {type: Date, index: true},
         comments: [{
-            cid: ObjectId,
-            authorId: ObjectId,
-            content: String,
-            createdAt: Date
+            cid: {type: ObjectId},
+            authorId: {type: ObjectId},
+            content: {type: String},
+            createdAt: {type: Date}
         }]
 	});
 

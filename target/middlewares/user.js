@@ -59,7 +59,7 @@ module.exports = function (done) {
                                 break;
                             }
 
-                            throw { code: -2, errMsg: '该操作需要相应的权限' };
+                            throw { code: -2, errMsg: '没有操作权限' };
 
                         case 7:
                             req.topic = topic;

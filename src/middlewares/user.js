@@ -15,7 +15,7 @@ module.exports = function(done) {
             throw {code: -1, errMsg: '帖子不存在或已被删除'};
         }
         if(topic.authorId.toString() !== req.session.user._id.toString()) {
-            throw {code: -2, errMsg: '该操作需要相应的权限'};
+            throw {code: -2, errMsg: '没有操作权限'};
         }
         req.topic = topic;
         next();

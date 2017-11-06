@@ -1,15 +1,9 @@
 'use strict';
 
-var _mongoose = require('mongoose');
-
-var _mongoose2 = _interopRequireDefault(_mongoose);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 module.exports = function (done) {
 
-  var Schema = _mongoose2.default.Schema;
-  var ObjectId = Schema.ObjectId;
+  var Schema = $.Schema;
+  var ObjectId = $.ObjectId;
 
   var Topic = new Schema({
     authorId: { type: ObjectId, index: true },
@@ -20,10 +14,10 @@ module.exports = function (done) {
     updateedAt: { type: Date, index: true },
     lastCommentedAt: { type: Date, index: true },
     comments: [{
-      cid: ObjectId,
-      authorId: ObjectId,
-      content: String,
-      createdAt: Date
+      cid: { type: ObjectId },
+      authorId: { type: ObjectId },
+      content: { type: String },
+      createdAt: { type: Date }
     }]
   });
 
